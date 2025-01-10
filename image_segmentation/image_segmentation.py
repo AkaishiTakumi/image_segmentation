@@ -4,7 +4,7 @@ import os
 
 def split_image(image_path, n, m, output_dir,input_without_ext):
     # 画像を開く
-
+    Image.MAX_IMAGE_PIXELS=2000000000 #20億 NULL:無制限
     img = Image.open(image_path)
     img_width, img_height = img.size
 
