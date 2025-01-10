@@ -1,1 +1,42 @@
+from PIL import Image
+import os
 
+def split_image(image_path, n, m, output_dir):
+    # 画像を開く
+    img = Image.open(image_path)
+    img_width, img_height = img.size
+
+    # 分割後の各画像の幅と高さを計算
+    tile_width = img_width // n
+    tile_height = img_height // m
+
+    # 出力ディレクトリが存在しない場合は作成
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 分割して保存
+    for i in range(m):  # 縦方向
+        for j in range(n):  # 横方向
+            # 分割領域の計算
+            left = j * tile_width
+            upper = i * tile_height
+            right = left + tile_width
+            lower = upper + tile_height
+
+            # 画像を切り取る
+            cropped_img = img.crop((left, upper, right, lower))
+
+            # ファイル名を指定して保存
+            output_path = os.path.join(output_dir, f"tile_{i}_{j}.png")
+            cropped_img.save(output_path)
+            print(f"Saved: {output_path}")
+
+    print("画像の分割が完了しました。")
+
+# 使用例
+if __name__ == "__main__":
+    image_path = "input_image.jpg"  # 分割する画像のパス
+    n = 4  # 横方向の分割数
+    m = 3  # 縦方向の分割数
+    output_dir = "output_tiles"  # 出力先ディレクトリ
+
+    split_image(image_path, n, m, output_dir)
