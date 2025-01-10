@@ -1,42 +1,45 @@
+ï»¿from wsgiref.validate import InputWrapper
 from PIL import Image
 import os
 
-def split_image(image_path, n, m, output_dir):
-    # ‰æ‘œ‚ğŠJ‚­
+def split_image(image_path, n, m, output_dir,input_without_ext):
+    # ç”»åƒã‚’é–‹ã
+
     img = Image.open(image_path)
     img_width, img_height = img.size
 
-    # •ªŠ„Œã‚ÌŠe‰æ‘œ‚Ì•‚Æ‚‚³‚ğŒvZ
+    # åˆ†å‰²å¾Œã®å„ç”»åƒã®å¹…ã¨é«˜ã•ã‚’è¨ˆç®—
     tile_width = img_width // n
     tile_height = img_height // m
 
-    # o—ÍƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚µ‚È‚¢ê‡‚Íì¬
+    # å‡ºåŠ›ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ä½œæˆ
     os.makedirs(output_dir, exist_ok=True)
 
-    # •ªŠ„‚µ‚Ä•Û‘¶
-    for i in range(m):  # c•ûŒü
-        for j in range(n):  # ‰¡•ûŒü
-            # •ªŠ„—Ìˆæ‚ÌŒvZ
+    # åˆ†å‰²ã—ã¦ä¿å­˜
+    for i in range(m):  # ç¸¦æ–¹å‘
+        for j in range(n):  # æ¨ªæ–¹å‘
+            # åˆ†å‰²é ˜åŸŸã®è¨ˆç®—
             left = j * tile_width
             upper = i * tile_height
             right = left + tile_width
             lower = upper + tile_height
 
-            # ‰æ‘œ‚ğØ‚èæ‚é
+            # ç”»åƒã‚’åˆ‡ã‚Šå–ã‚‹
             cropped_img = img.crop((left, upper, right, lower))
 
-            # ƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚Ä•Û‘¶
-            output_path = os.path.join(output_dir, f"tile_{i}_{j}.png")
+            # ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦ä¿å­˜
+            output_path = os.path.join(output_dir, f"{input_without_ext}_tile_{i}_{j}.png")
             cropped_img.save(output_path)
             print(f"Saved: {output_path}")
 
-    print("‰æ‘œ‚Ì•ªŠ„‚ªŠ®—¹‚µ‚Ü‚µ‚½B")
+    print("ç”»åƒã®åˆ†å‰²ãŒå®Œäº†ã—ã¾ã—ãŸã€‚")
 
-# g—p—á
+# ä½¿ç”¨ä¾‹
 if __name__ == "__main__":
-    image_path = "input_image.jpg"  # •ªŠ„‚·‚é‰æ‘œ‚ÌƒpƒX
-    n = 4  # ‰¡•ûŒü‚Ì•ªŠ„”
-    m = 3  # c•ûŒü‚Ì•ªŠ„”
-    output_dir = "output_tiles"  # o—ÍæƒfƒBƒŒƒNƒgƒŠ
+    image_path=input("åˆ†å‰²ã™ã‚‹ç”»åƒã®ãƒ‘ã‚¹ã‚’å…¥åŠ›:\n")
+    n=int(input("æ¨ªæ–¹å‘ã®åˆ†å‰²æ•°ã‚’å…¥åŠ›:"))
+    m=int(input("ç¸¦æ–¹å‘ã®åˆ†å‰²æ•°ã‚’å…¥åŠ›:"))
+    input_without_ext=os.path.splitext(os.path.basename(image_path))[0]
+    output_dir="output_tiles/"+input_without_ext
 
-    split_image(image_path, n, m, output_dir)
+    split_image(image_path, n, m, output_dir,input_without_ext)
