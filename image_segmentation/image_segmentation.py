@@ -2,7 +2,7 @@
 from PIL import Image
 import os
 
-def split_image(image_path, n, m, output_dir,input_without_ext):
+def split_image(image_path, n, m, output_dir,input_without_ext_nxm):
     # 画像を開く
     Image.MAX_IMAGE_PIXELS=2000000000 #20億 NULL:無制限
     img = Image.open(image_path)
@@ -28,7 +28,7 @@ def split_image(image_path, n, m, output_dir,input_without_ext):
             cropped_img = img.crop((left, upper, right, lower))
 
             # ファイル名を指定して保存
-            output_path = os.path.join(output_dir, f"{input_without_ext}_tile_{i}_{j}.png")
+            output_path = os.path.join(output_dir, f"{input_without_ext_nxm}_tile_{i}_{j}.png")
             cropped_img.save(output_path)
             print(f"Saved: {output_path}")
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     image_path=input("分割する画像のパスを入力:\n")
     n=int(input("横方向の分割数を入力:"))
     m=int(input("縦方向の分割数を入力:"))
-    input_without_ext=os.path.splitext(os.path.basename(image_path))[0]
-    output_dir="output_tiles/"+input_without_ext
+    input_without_ext_nxm=os.path.splitext(os.path.basename(image_path))[0]+f"_{n}x{m}"
+    output_dir="output_tiles\\"+input_without_ext_nxm
 
-    split_image(image_path, n, m, output_dir,input_without_ext)
+    split_image(image_path, n, m, output_dir,input_without_ext_nxm)
