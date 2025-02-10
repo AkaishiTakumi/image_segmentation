@@ -36,7 +36,15 @@ def split_image(image_path, n, m, output_dir,input_without_ext_nxm):
 
 # 使用例
 if __name__ == "__main__":
-    image_path=input("分割する画像のパスを入力:\n")
+    # 入力ディレクトリが存在しない場合は作成
+    os.makedirs("image", exist_ok=True)
+    input("imageディレクトリに分割したい画像を入れてください。\n"+
+          "分割したい画像をimageディレクトリに入れたらEnterを押してください。\n"+
+          "分割する画像のパスを入力してください。")
+    for file in os.listdir("image"):
+        if os.path.isfile(os.path.join("image", file)):  # ファイルのみ表示
+            print(file)
+    image_path=input("コピーして使用:\n")
     n=int(input("横方向の分割数を入力:"))
     m=int(input("縦方向の分割数を入力:"))
     input_without_ext_nxm=os.path.splitext(os.path.basename(image_path))[0]+f"_{n}x{m}"
